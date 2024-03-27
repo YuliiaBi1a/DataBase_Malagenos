@@ -4,7 +4,7 @@ from src.models.productModel import Product
 
 main = Blueprint('mgmalagenos_blueprint', __name__)
 
-@main.route('/', methods = [ 'GET','POST','PATCH','DELETE'])
+@main.route('/', methods = ['GET','POST','PATCH','DELETE'])
 def manage_product():
     
     if request.method == "GET":
