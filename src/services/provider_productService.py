@@ -41,3 +41,39 @@ class ProviderProductService():
         
         except Exception as ex:
             print(ex)
+    
+    @classmethod
+    def patch_provider_product(cls, id_proveedor_producto, updates):
+        try:
+            connection = get_connection()
+            
+            with connection.cursor() as cursor:
+                # Створюємо рядок для SQL-запиту для оновлення курсу
+                set_clause = ", ".join([f"{key} = '{value}'" for key, value in updates.items()])
+                
+                # Виконуємо SQL-запит PATCH для оновлення курсу з вказаним ID
+                cursor.execute(f'UPDATE proveedor_producto SET {set_clause} WHERE proveedor_producto.id_proveedor_producto = %s', (id_proveedor_producto,))
+                
+                connection.commit()
+                
+            connection.close()
+            return "Data base is close"
+            
+        except Exception as ex:
+            print(ex)
+            
+    @classmethod
+    def delete_provider_product(cls, id_proveedor_producto): 
+        try:
+            connection  = get_connection()
+            print(connection)
+            
+            with connection.cursor() as cursor:
+                cursor.execute('DELETE FROM proveedor_producto WHERE proveedor_producto.id_proveedor_producto = %s', (id_proveedor_producto))
+                connection.commit()
+                
+            connection.close()
+            return "Data base is close"
+            
+        except Exception as ex:
+            print(ex)
