@@ -8,7 +8,8 @@ class ProductService():
             connection  = get_connection()
             print(connection)
             with connection.cursor() as cursor:
-                cursor.execute('SELECT * FROM producto')
+                #cursor.execute('CALL select_all_product();')
+                cursor.callproc('select_all_product')
                 result = cursor.fetchall()
                 print(result)
                 
@@ -32,8 +33,9 @@ class ProductService():
             
             
             with connection.cursor() as cursor:
-                cursor.execute("INSERT INTO producto (id_producto, nombre_producto,descr_producto, marca_producto, precio_producto, stock_producto) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')"
-                               .format(id_producto, nombre_producto, descr_producto, marca_producto, precio_producto, stock_producto))
+                #cursor.execute("INSERT INTO producto (id_producto, nombre_producto,descr_producto, marca_producto, precio_producto, stock_producto) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')"
+                               #.format(id_producto, nombre_producto, descr_producto, marca_producto, precio_producto, stock_producto))
+                cursor.callproc('insert_product', (id_producto, nombre_producto, descr_producto, marca_producto, precio_producto, stock_producto))               
                 connection.commit()
                 #print(cursor)
                 
@@ -45,16 +47,22 @@ class ProductService():
             
                 
     @classmethod
-    def patch_product(cls, id_producto, updates):
+    def patch_product(cls, producto: Product ):
         try:
             connection = get_connection()
             
             with connection.cursor() as cursor:
-                # Створюємо рядок для SQL-запиту для оновлення курсу
-                set_clause = ", ".join([f"{key} = '{value}'" for key, value in updates.items()])
                 
-                # Виконуємо SQL-запит PATCH для оновлення курсу з вказаним ID
-                cursor.execute(f'UPDATE producto SET {set_clause} WHERE producto.id_producto = %s', (id_producto,))
+                id_producto =producto.id_producto
+                nombre_producto = producto.nombre_producto
+                descr_producto = producto.descr_producto
+                marca_producto = producto.marca_producto
+                precio_producto = producto.precio_producto
+                stock_producto = producto.stock_producto
+                
+                
+                #cursor.execute("UPDATE producto SET nombre_producto = '{0}', descr_producto = '{1}', marca_producto = '{2}', precio_producto = {3}, stock_producto = {4}  WHERE producto.id_producto = {5}".format(nombre_producto,descr_producto,marca_producto,precio_producto,stock_producto,id_producto))
+                cursor.callproc('update_product2', (id_producto, nombre_producto, descr_producto, marca_producto, precio_producto, stock_producto)) 
                 
                 connection.commit()
                 
@@ -71,7 +79,9 @@ class ProductService():
             print(connection)
             
             with connection.cursor() as cursor:
-                cursor.execute('DELETE FROM producto WHERE producto.id_producto = %s', (id_producto))
+                #cursor.execute('DELETE FROM producto WHERE producto.id_producto = %s', (id_producto))
+                #cursor.execute("CALL delete_product(%s)", (id_producto))
+                cursor.callproc('delete_product', (id_producto,))
                 connection.commit()
                 
             connection.close()

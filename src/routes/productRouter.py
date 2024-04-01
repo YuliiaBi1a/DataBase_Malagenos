@@ -29,8 +29,22 @@ def manage_product():
         
     elif request.method == "PATCH": 
         id_producto = request.json['id_producto']
-        updates = request.json['updates']
-        patch_product = ProductService.patch_product(id_producto, updates)
+        nombre_producto = request.json['nombre_producto']
+        descr_producto = request.json['descr_producto']
+        marca_producto = request.json['marca_producto']
+        precio_producto = request.json['precio_producto']
+        stock_producto = request.json['stock_producto']
+       
+        product = Product(id_producto,
+                        nombre_producto,
+                        descr_producto, 
+                        marca_producto,
+                        precio_producto,
+                        stock_producto)
+        print(product)
+        # updates = request.json['updates'] #['precio_producto']
+        # patch_product = ProductService.patch_product(id_producto, updates)
+        patch_product = ProductService.patch_product(product)
         print(patch_product) 
     
     elif request.method == "DELETE":
