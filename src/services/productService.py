@@ -79,9 +79,9 @@ class ProductService():
             print(connection)
             
             with connection.cursor() as cursor:
-                #cursor.execute('DELETE FROM producto WHERE producto.id_producto = %s', (id_producto))
-                #cursor.execute("CALL delete_product(%s)", (id_producto))
-                cursor.callproc('delete_product', (id_producto,))
+                #cursor.execute('DELETE FROM producto WHERE producto.id_producto = %s', (id_producto)) Aqui uso SQL
+                #cursor.execute("CALL delete_product(%s)", (id_producto)) Aqui uso procedimientos
+                cursor.callproc('delete_product', (id_producto,)) # Aqui uso otro metodo callproc para trabajar con procedimientos
                 connection.commit()
                 
             connection.close()
